@@ -9,14 +9,15 @@
 
 
 /* Declare some numerical methods for solving ODEs
-INPUTS:	f		- handle on the funtion defining the ODE, i.e. y'(t) = f(t,y(t))
-		t0		- initial time
-		y0		- initial value (Vector of dimension DIM)
-		h/tol	- step size/tolerance (depending on the method)
-		t		- array to store time steps
-		y		- array to store approximated solutions at times t
-		steps	- number of steps (length of the arrays t and y)
-OUTPUT: none (implicitly given via t and y)
+ * INPUTS:	@param f	- 	handle on the funtion defining the ODE, i.e. y'(t) = f(t,y(t))
+ *		@param t0	- 	initial time
+ *		@param y0	- 	initial value (Vector of dimension DIM)
+ *		@param h/tol		step size/tolerance (depending on the method)
+ *		@param t	- 	array to store time steps
+ *		@param y	- 	array to store approximated solutions at times t
+ *		@param steps	- 	number of steps (length of the arrays t and y)
+ *
+ * OUTPUT: 	@return		- 	none (implicitly given via t and y)
  */
 
 void euler (void (*f)(double,struct Vector*,struct Vector*), double t0, struct Vector* y0, double h, double* t, struct Vector** y, int steps);
