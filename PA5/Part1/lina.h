@@ -7,7 +7,7 @@ struct Vector{
 	int height;
 };
 
-/*Matrix struct. Stores a two-dimensional array of matrix values and its dimensions */
+/* Matrix struct. Stores a two-dimensional array of matrix values and its dimensions */
 struct Matrix{
 	double** values;
 	int height;
@@ -21,7 +21,8 @@ struct Vector* new_Vector(int height);
 void delete_Vector(struct Vector* v);
 
 /* Declare some functions to manipulate and utilize vectors.
-Operations like add and scale will not change their argument vectors. The result will stored in res. */
+ * Operations like add and scale will not change their argument vectors. The result will stored in res. 
+ */
 void print_Vector(struct Vector* v);
 
 double vectornorm(struct Vector* v);
@@ -39,8 +40,8 @@ struct Matrix* new_Matrix(int height, int width);
 void delete_Matrix(struct Matrix* m);
 
 /* Declare some functions to manipulate and utilize matrices.
-Operations like multiply and transpose will not change their argument matrices. The result is stored in res.
-*/
+ *Operations like multiply and transpose will not change their argument matrices. The result is stored in res.
+ */
 struct Matrix* ones(int height, int width);
 
 struct Matrix* eye(int size);

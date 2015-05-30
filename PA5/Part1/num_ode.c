@@ -5,9 +5,9 @@
 #include "num_ode.h"
 
 
-/* Declare some numerical methods for solving ODEs
-For details see num_ode.h
-*/
+/* Declare some numerical methods for solving ODEs.
+ * For details see num_ode.h
+ */
 
 /* Explicit Euler Scheme */
 void euler (void (*f)(double,struct Vector*,struct Vector*), double t0, struct Vector* y0, double h, double* t, struct Vector** y, int steps) {	

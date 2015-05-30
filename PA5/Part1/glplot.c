@@ -29,7 +29,7 @@ void plotArrayPoints (double* x, double* y, int size, double xmin, double xmax, 
 	glEnd();
 }
 
-/*Plots the graph of a function, for details see glplot.h */
+/* Plots the graph of a function, for details see glplot.h */
 void plotFunction (double (*f)(double), double xmin, double xmax, double ymin, double ymax, double xpos, double ypos, double width, double height, double stepsize) {
 	double xdiff = xmax-xmin;
 	double xfac = width/xdiff;

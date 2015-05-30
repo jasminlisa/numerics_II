@@ -12,7 +12,7 @@
 
 
 
-//Run Program
+/* Run Program */
 int main (int argc, char** argv) {
 		
 	//Check if SDL Initialization is successful
@@ -71,7 +71,7 @@ int main (int argc, char** argv) {
 		//Prepare next frame buffer
 		glClear(GL_COLOR_BUFFER_BIT);
 		glColor4f(0.0f,0.0f,0.0f,1.0f);
-		//calculations and plotting here
+		//<-- do calculations and plotting here <--
 		
 		//Wait for next frame, if necessary (FPS cap) 
 		if (SDL_GetTicks()-timer < 1000/fps_cap) {

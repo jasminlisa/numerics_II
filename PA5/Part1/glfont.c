@@ -7,8 +7,8 @@
 GLuint base;
 
 /* Constructor and initialization for the font to be used in opengl. 
-Code by Jeff Molofee and Richard Campbell 
-*/
+ * Code by Jeff Molofee and Richard Campbell 
+ */
 void buildFont() {
     Display *dpy;
     XFontStruct *fontInfo;
