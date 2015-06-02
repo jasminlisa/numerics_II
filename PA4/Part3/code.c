@@ -86,7 +86,11 @@ int main (int argc, char** argv) {
 	}
 
 	//Create Window
+<<<<<<< HEAD
 	SDL_Window *win = SDL_CreateWindow("Spaceship + Gravity",50,50,1280,1024,SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+=======
+	SDL_Window *win = SDL_CreateWindow("Spaceship + Gravity",50,50,640,480,SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+>>>>>>> 6706d5c8b0ffba594edbc578f95f2c12987a0b95
 	if (!win) {
 		fprintf(stderr, "Could not create window: %s\n", SDL_GetError());
 	}
@@ -96,7 +100,11 @@ int main (int argc, char** argv) {
 	if (!context) {
 		fprintf(stderr, "Could not create OpenGL context: %s\n", SDL_GetError());
 	}
+<<<<<<< HEAD
 	glViewport(0,0,(GLsizei)1280,(GLsizei)1024);
+=======
+	glViewport(0,0,(GLsizei)640,(GLsizei)480);
+>>>>>>> 6706d5c8b0ffba594edbc578f95f2c12987a0b95
 	glClearColor(1.0f,1.0f,1.0f,1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	SDL_GL_SwapWindow(win);
@@ -129,7 +137,11 @@ int main (int argc, char** argv) {
 	bool down = false;
 	y0 = new_Vector(DIM);
 	y0->values[0] = 0.3;
+<<<<<<< HEAD
 	y0->values[1] = 0.5;
+=======
+	y0->values[1] = 0.3;
+>>>>>>> 6706d5c8b0ffba594edbc578f95f2c12987a0b95
 	y0->values[2] = -1.5;
 	y0->values[3] = 0.0;
 	int steps = 2; 		//do one step at a time (+initial value)
@@ -147,7 +159,11 @@ int main (int argc, char** argv) {
 	int count = 0;
 	char* fps = malloc(sizeof(char)*32);
 	SDL_Event event;
+<<<<<<< HEAD
 	unsigned int fps_cap = 60;
+=======
+	unsigned int fps_cap = 200;
+>>>>>>> 6706d5c8b0ffba594edbc578f95f2c12987a0b95
 	unsigned int timer;
 	while (loop) {
 
