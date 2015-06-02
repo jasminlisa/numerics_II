@@ -29,6 +29,32 @@ void plotArrayPoints (double* x, double* y, int size, double xmin, double xmax, 
 	glEnd();
 }
 
+/* Plots 3D array data as points, for details see glplot.h */
+void plotArrayPoints3D (double* x, double* y, double* z, int size) {
+	glPointSize(1.0f);
+	double t = 0;
+	for (int j=1; j<size; j++) {
+		t = (double)(j)/(double)(size);
+		glColor4f(0.137255*t+0.85*(1-t),0.556863*t+0.85*(1-t),0.419608*t+0.10*(1-t),1.0);
+		glBegin(GL_POINTS);
+			glVertex3f(x[j],y[j],z[j]);
+		glEnd();
+	}	
+}
+
+/* Plots 3D cartesian axis, for details see glplot.h */
+void plotAxis3D (double xmin, double xmax, double ymin, double ymax, double zmin, double zmax, double xorigin, double yorigin, double zorigin) {
+	glBegin(GL_LINES);
+		glVertex3f(xmin,yorigin,zorigin);
+		glVertex3f(xmax,yorigin,zorigin);
+		glVertex3f(xorigin,ymin,zorigin);
+		glVertex3f(xorigin,ymax,zorigin);
+		glVertex3f(xorigin,yorigin,zmin);
+		glVertex3f(xorigin,yorigin,zmax);
+	glEnd();
+}
+
+
 /* Plots the graph of a function, for details see glplot.h */
 void plotFunction (double (*f)(double), double xmin, double xmax, double ymin, double ymax, double xpos, double ypos, double width, double height, double stepsize) {
 	double xdiff = xmax-xmin;
