@@ -55,4 +55,16 @@ void multiply_Matrices(struct Matrix* m1, struct Matrix* m2, struct Matrix* res)
 /* Declare a matrix-vector-multiplication. The result is stored in res */
 void multiply_Matrix_Vector(struct Matrix* m, struct Vector* v, struct Vector* res);
 
+/*
+Calculates the maximum of an array. Needed for dynamic calculation of ymin and ymax
+@author Alex
+*/
+double getMaximum(double* x, int size);
+
+/*
+Calculates the minimum of an array. Needed for dynamic calculation of ymin and ymax
+@author Alex
+*/
+double getMinimum(double* x, int size); 
+
 #endif /* LINA_H */

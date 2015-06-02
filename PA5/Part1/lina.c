@@ -158,3 +158,27 @@ void multiply_Matrix_Vector(struct Matrix* m, struct Vector* v, struct Vector* r
 		res->values[i] = val;
 	}
 }
+
+
+double getMaximum(double* x, int size){
+	double max=-1.0/0.0;
+	int i;
+	for(i=0;i<size;i++){
+		if(x[i]>max){
+			max=x[i];
+		}
+	}
+	return max;
+}
+
+
+double getMinimum(double* x, int size){
+	double min=1.0/0.0;
+	int i;
+	for(i=0;i<size;i++){
+		if(x[i]<min){
+			min=x[i];
+		}
+	}
+	return min;
+}
