@@ -1,5 +1,6 @@
 #include <GL/gl.h>
 #include "glplot.h"
+#include "lina.h"
 
 /* Plots array data, for details see glplot.h */
 void plotArray (double* x, double* y, int size, double xmin, double xmax, double ymin, double ymax, double xpos, double ypos, double width, double height) {
@@ -29,7 +30,8 @@ void plotArrayPoints (double* x, double* y, int size, double xmin, double xmax, 
 	glEnd();
 }
 
-/* Plots 3D array data as points, for details see glplot.h */
+/* Plots 3D array data as points, for details see glplot.h 
+@changed by Alex*/
 void plotArrayPoints3D (double* x, double* y, double* z, int size) {
 	glPointSize(1.0f);
 	double t = 0;

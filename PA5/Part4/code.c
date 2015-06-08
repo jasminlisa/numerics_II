@@ -32,14 +32,15 @@ int main (int argc, char** argv) {
 	
 	//Read input argument
 	int steps=1000;
-	double tol = 0.1;
+	/*As we don't use an adaptive method (this did not work), we have a stepsize and no tolerance*/
+	double h = 0.1;
 	if (argc == 1){
-		printf("USAGE: NumberOfSteps Tolerance\nExited.\n");
+		printf("USAGE: NumberOfSteps StepSize\nExited.\n");
 		return 0;
 	} 
 	if (argc > 1) steps = atoi(argv[1]);	
-	if (argc > 2) tol = atof(argv[2]);	
-	printf("Input arguments: %i %f \n", steps, tol);
+	if (argc > 2) h = atof(argv[2]);	
+	printf("Input arguments: %i %f \n", steps, h);
 	
 	//Check if SDL Initialization is successful
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -91,8 +92,8 @@ int main (int argc, char** argv) {
 		vec[j] = new_Vector(DIM);
 	}
 
-	//For Exercise 4: Adaptive Runge-Kutta of Order 3
-	adaptive_rk3(f, t0, v0, tol, t, vec, steps);
+	//For Exercise 4: Normal runge Kutte method of order 4 as the adaptive one did not work
+	rk4(f, t0, v0, h, t, vec, steps);
 	glColor4f(1.0f,0.0f,0.0f,1.0f);
 	for (int j=0; j < steps; j++) {
 		xValues[j] = vec[j]->values[0];
@@ -111,7 +112,9 @@ int main (int argc, char** argv) {
 	SDL_GL_SwapWindow(win);
 
 	
-	//Look Around Loop
+	/*Look Around Loop
+	Slightly changed the constants for easier look around
+	*/
 	bool loop = true;
 	double xMouse = 0;
 	double yMouse = 0;
@@ -141,20 +144,20 @@ int main (int argc, char** argv) {
 			}
 			if (event.type== SDL_KEYDOWN) {
 				if(event.key.keysym.scancode == SDL_SCANCODE_W)
-					ypos += 0.1;
+					ypos += 0.2;
 				if(event.key.keysym.scancode == SDL_SCANCODE_S)
-					ypos -= 0.1;
+					ypos -= 0.2;
 				if(event.key.keysym.scancode == SDL_SCANCODE_A)
-					xpos -= 0.1;
+					xpos -= 0.2;
 				if(event.key.keysym.scancode == SDL_SCANCODE_D)
-					xpos += 0.1;
+					xpos += 0.2;
 				if(event.key.keysym.scancode == SDL_SCANCODE_Q)
-					zpos += 0.1;
+					zpos += 0.2;
 				if(event.key.keysym.scancode == SDL_SCANCODE_E)
-					zpos -= 0.1;
+					zpos -= 0.2;
 			}
 			if (event.type== SDL_MOUSEWHEEL) {
-				mouseZoom += 0.01*event.wheel.y;
+				mouseZoom += 0.001*event.wheel.y;
 			}
 		}
 		
