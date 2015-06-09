@@ -41,7 +41,7 @@ int main (int argc, char** argv) {
 	int steps=1000;
 	int orbit = 1;
 	if (argc == 1){
-		printf("USAGE: NumberOfExercise stepSize NumberOfSteps Tolerance\nExited.\n");
+		printf("USAGE: NumberOfExercise stepSize NumberOfSteps Orbit\nExited.\n");
 		return 0;
 	} 
 	if (argc > 1) in = atoi(argv[1]);	
@@ -56,7 +56,7 @@ int main (int argc, char** argv) {
 	}
 
 	//Create Window
-	SDL_Window *win = SDL_CreateWindow("Exercise 5",50,50,640,480,SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+	SDL_Window *win = SDL_CreateWindow("Exercise 5",50,50,1280,1024,SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 	if (!win) {
 		fprintf(stderr, "Could not create window: %s\n", SDL_GetError());
 	}
@@ -66,7 +66,7 @@ int main (int argc, char** argv) {
 	if (!context) {
 		fprintf(stderr, "Could not create OpenGL context: %s\n", SDL_GetError());
 	}
-	glViewport(0,0,(GLsizei)640,(GLsizei)480);
+	glViewport(0,0,(GLsizei)1280,(GLsizei)1024);
 	glClearColor(1.0f,1.0f,1.0f,1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	SDL_GL_SwapWindow(win);
@@ -114,7 +114,7 @@ int main (int argc, char** argv) {
 	}
 
 	//For Exercise 1: Simply do the explicit euler
-	euler (f, t0, y0, h, t, y, steps);
+	euler(f, t0, y0, h, t, y, steps);
 	glColor4f(1.0f,0.0f,0.0f,1.0f);
 	for (int j=0; j < steps; j++) {
 		xValues[j] = y[j]->values[0];
@@ -173,10 +173,10 @@ int main (int argc, char** argv) {
 				}
 				if (event.type== SDL_MOUSEWHEEL) {
 					if (event.wheel.y>0) {
-						mouseZoom *= 2;
+						mouseZoom *= 1.5;
 					}
 					if (event.wheel.y<0) {
-						mouseZoom /= 2;
+						mouseZoom /= 1.5;
 					}
 				}
 			}
@@ -204,9 +204,9 @@ int main (int argc, char** argv) {
 		
 			//Plot as array points (otherwise nothing interesting happens)
 			glColor4f(0.0,0.0,0.0,0.0);
-			plotAxis3D(-xmax,xmax,-ymax,ymax,t0,t0+steps*h+1,0,0,t0);
+			plotAxis3D(-2,2,-2,2,t0,t0+steps*h+1,0,0,t0);
 			//plotArrayPoints(xValues, yValues, steps, xmin, xmax, ymin, ymax, xpos, ypos, width, height);
-			plotArrayPoints3D(xValues,yValues,t,steps);
+			plotArray3D(xValues,yValues,t,steps);
 			glColor4f(0.0,0.0,0.0,0.0);
 		}
 	} else { //2d orbit plotting

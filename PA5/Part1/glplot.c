@@ -42,13 +42,29 @@ void plotArrayPoints3D (double* x, double* y, double* z, int size) {
 	}	
 }
 
+/* Plots 3D array data as line strips, for details see glplot.h */
+void plotArray3D (double* x, double* y, double* z, int size) {
+	double t = 0;
+	for (int j=1; j<size-1; j++) {
+		t = (double)(j)/(double)(size);
+		glColor4f(0.137255*t+0.85*(1-t),0.556863*t+0.85*(1-t),0.419608*t+0.10*(1-t),1.0);
+		glBegin(GL_LINES);
+			glVertex3f(x[j],y[j],z[j]);
+			glVertex3f(x[j+1],y[j+1],z[j+1]);
+		glEnd();
+	}	
+}
+
 /* Plots 3D cartesian axis, for details see glplot.h */
 void plotAxis3D (double xmin, double xmax, double ymin, double ymax, double zmin, double zmax, double xorigin, double yorigin, double zorigin) {
 	glBegin(GL_LINES);
+		glColor4f(1.0,0.0,0.0,1.0);
 		glVertex3f(xmin,yorigin,zorigin);
 		glVertex3f(xmax,yorigin,zorigin);
+		glColor4f(0.0,1.0,0.0,1.0);
 		glVertex3f(xorigin,ymin,zorigin);
 		glVertex3f(xorigin,ymax,zorigin);
+		glColor4f(0.0,0.0,1.0,1.0);
 		glVertex3f(xorigin,yorigin,zmin);
 		glVertex3f(xorigin,yorigin,zmax);
 	glEnd();

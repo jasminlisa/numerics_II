@@ -47,10 +47,13 @@ void plotArrayPoints3D (double* x, double* y, double* z, int size) {
 /* Plots 3D cartesian axis, for details see glplot.h */
 void plotAxis3D (double xmin, double xmax, double ymin, double ymax, double zmin, double zmax, double xorigin, double yorigin, double zorigin) {
 	glBegin(GL_LINES);
+		glColor4f(1.0,0.0,0.0,1.0);
 		glVertex3f(xmin,yorigin,zorigin);
 		glVertex3f(xmax,yorigin,zorigin);
+		glColor4f(0.0,1.0,0.0,1.0);
 		glVertex3f(xorigin,ymin,zorigin);
 		glVertex3f(xorigin,ymax,zorigin);
+		glColor4f(0.0,0.0,1.0,1.0);
 		glVertex3f(xorigin,yorigin,zmin);
 		glVertex3f(xorigin,yorigin,zmax);
 	glEnd();

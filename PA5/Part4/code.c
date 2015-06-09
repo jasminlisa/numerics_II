@@ -35,7 +35,7 @@ int main (int argc, char** argv) {
 	/*As we don't use an adaptive method (this did not work), we have a stepsize and no tolerance*/
 	double h = 0.1;
 	if (argc == 1){
-		printf("USAGE: NumberOfSteps StepSize\nExited.\n");
+		printf("USAGE: NumberOfSteps StepSize/Tolerance\nExited.\n");
 		return 0;
 	} 
 	if (argc > 1) steps = atoi(argv[1]);	
@@ -48,7 +48,7 @@ int main (int argc, char** argv) {
 	}
 
 	//Create Window
-	SDL_Window *win = SDL_CreateWindow("Exercise 5, Lorenz Equations",50,50,640,480,SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+	SDL_Window *win = SDL_CreateWindow("Exercise 5, Lorenz Equations",50,50,1280,1024,SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 	if (!win) {
 		fprintf(stderr, "Could not create window: %s\n", SDL_GetError());
 	}
@@ -58,7 +58,7 @@ int main (int argc, char** argv) {
 	if (!context) {
 		fprintf(stderr, "Could not create OpenGL context: %s\n", SDL_GetError());
 	}
-	glViewport(0,0,(GLsizei)640,(GLsizei)480);
+	glViewport(0,0,(GLsizei)1280,(GLsizei)1024);
 	glClearColor(1.0f,1.0f,1.0f,1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	SDL_GL_SwapWindow(win);
@@ -92,8 +92,9 @@ int main (int argc, char** argv) {
 		vec[j] = new_Vector(DIM);
 	}
 
-	//For Exercise 4: Normal runge Kutte method of order 4 as the adaptive one did not work
+	//For Exercise 4: Normal runge Kutte method of order 4 or the adaptive Rk3
 	rk4(f, t0, v0, h, t, vec, steps);
+	//adaptive_rk3(f, t0, v0, h, t, vec, steps);
 	glColor4f(1.0f,0.0f,0.0f,1.0f);
 	for (int j=0; j < steps; j++) {
 		xValues[j] = vec[j]->values[0];
@@ -184,7 +185,8 @@ int main (int argc, char** argv) {
 		glColor4f(0.0,0.0,0.0,0.0);
 		plotAxis3D(xmin-2,xmax+2,ymin-2,ymax+2,zmin-2,zmax+2,0,0,0);
 		glColor4f(1.0,0.0,0.0,0.0);
-		plotArrayPoints3D(xValues, yValues, zValues, steps);
+		//plotArrayPoints3D(xValues, yValues, zValues, steps);
+		plotArrayPoints3D(xValues, yValues, t, steps);
 	}
 
 
