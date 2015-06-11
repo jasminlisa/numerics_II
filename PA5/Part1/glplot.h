@@ -49,6 +49,17 @@ void plotArrayPoints (double* x, double* y, int size, double xmin, double xmax, 
 void plotArrayPoints3D (double* x, double* y, double* z, int size);
 
 /*
+ * Draws a set of 3-dimensional data as linestrip on an OpenGl canvas
+ * INPUTS:	@param x	-	the x coordinates as an array
+ *		@param y	-	the y coordinates as an array
+ *		@param z	- 	the z coordinate as an
+ *		@param size	-	the length of the data arrays (x and y need to have equal length)
+ *
+ * OUTPUT: 	@return		-	none
+ */
+void plotArray3D (double* x, double* y, double* z, int size);
+
+/*
  * Draws 3-dimensional cartesian axis. Axis intersect at the point given as origin.
  * INPUTS:	@param xmin	-	the minimum x coordinate
  *		@param xmax	-	the maximum x coordinate
