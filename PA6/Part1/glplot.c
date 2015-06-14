@@ -11,7 +11,7 @@ void plotArray (double* x, double* y, int size, double xmin, double xmax, double
 	double yfac = height/ydiff;
 	glPointSize(3.0f);
 	glBegin(GL_LINE_STRIP);
-		for (int j=1; j<size; j++) {
+		for (int j=0; j<size; j++) {
 			glVertex3f((x[j]-xmin)*xfac+xpos,(y[j]-ymin)*yfac+ypos,0.0f);
 		}	
 	glEnd();
@@ -25,7 +25,7 @@ void plotArrayPoints (double* x, double* y, int size, double xmin, double xmax, 
 	double yfac = height/ydiff;
 	glPointSize(3.0f);
 	glBegin(GL_POINTS);
-		for (int j=1; j<size; j++) {
+		for (int j=0; j<size; j++) {
 			glVertex3f((x[j]-xmin)*xfac+xpos,(y[j]-ymin)*yfac+ypos,0.0f);
 		}	
 	glEnd();
@@ -35,7 +35,7 @@ void plotArrayPoints (double* x, double* y, int size, double xmin, double xmax, 
 void plotArrayPoints3D (double* x, double* y, double* z, int size) {
 	glPointSize(1.0f);
 	double t = 0;
-	for (int j=1; j<size; j++) {
+	for (int j=0; j<size; j++) {
 		t = (double)(j)/(double)(size);
 		glColor4f(0.65*t+0.85*(1-t),0.35*t+0.85*(1-t),0.25*t+0.10*(1-t),1.0);
 		glBegin(GL_POINTS);
@@ -46,11 +46,11 @@ void plotArrayPoints3D (double* x, double* y, double* z, int size) {
 
 /* Plots 3D array data as line strip, for details see glplot.h  */
 void plotArray3D (double* x, double* y, double* z, int size) {
-	double t = 0;
+	//double t = 0;
 	glBegin(GL_LINE_STRIP);
-		for (int j=1; j<size; j++) {
-			t = (double)(j)/(double)(size);
-			glColor4f(0.65*t+0.85*(1-t),0.35*t+0.85*(1-t),0.25*t+0.10*(1-t),1.0);
+		for (int j=0; j<size; j++) {
+			//t = (double)(j)/(double)(size);
+			//glColor4f(0.65*t+0.85*(1-t),0.35*t+0.85*(1-t),0.25*t+0.10*(1-t),1.0);
 			glVertex3f(x[j],y[j],z[j]);
 		}	
 	glEnd();

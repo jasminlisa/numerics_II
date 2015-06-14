@@ -19,6 +19,35 @@ void paraboloid (struct Matrix* X, struct Matrix* Y, struct Matrix* Z) {
 	}
 }
 
+/* Iterative method to construct geodesics on the paraboloid */
+void geodesic_step(struct Vector* vec, double h, struct Vector* res) {
+	double tmpx = vec->values[0]+h*vec->values[3];
+	double tmpy = vec->values[1]+h*vec->values[4];
+	double tmpz = vec->values[2]+h*vec->values[5];
+	double lambda = 0;
+	if (tmpx==0 && tmpy==0) {
+		res->values[0] = 0;
+		res->values[1] = 0;
+		res->values[2] = 0;
+		res->values[3] = 1/h * -vec->values[0];
+		res->values[4] = 1/h * -vec->values[1];
+		res->values[5] = 0;
+	} else {
+		lambda = (-4*tmpx*tmpx-4*tmpy*tmpy-1+sqrt(16*tmpx*tmpx*tmpz+8*tmpx*tmpx+16*tmpy*tmpy*tmpz+8*tmpy*tmpy+1))/(8*(tmpx*tmpx+tmpy*tmpy));
+		res->values[0] = tmpx + 2*lambda*tmpx;
+		res->values[1] = tmpy + 2*lambda*tmpy;
+		res->values[2] = tmpz - lambda;
+		double diffx = res->values[0]-vec->values[0];
+		double diffy = res->values[1]-vec->values[1];
+		double diffz = res->values[2]-vec->values[2];
+		double numerator = -(2*diffx*res->values[0]+2*diffy*res->values[1]-diffz);
+		double denominator = 4*res->values[0]*res->values[0]+4*res->values[1]*res->values[1]+1;
+		res->values[3] = 1/h * (diffx + 2*numerator/denominator*res->values[0]);
+		res->values[4] = 1/h * (diffy + 2*numerator/denominator*res->values[1]);
+		res->values[5] = 1/h * (diffz - numerator/denominator);
+	}		
+}
+
 /* RHS to describe a geodesic on the paraboiloid manifold */
 void geodesic_rhs (double t, struct Vector* vec, struct Vector* res) {
 	res->values[0] = vec->values[3]; //d/dt x = a
@@ -90,6 +119,9 @@ int main (int argc, char** argv) {
 	double* xValues = malloc(sizeof(double)*steps);
 	double* yValues = malloc(sizeof(double)*steps);
 	double* zValues = malloc(sizeof(double)*steps);
+	double* xValues_it = malloc(sizeof(double)*steps);
+	double* yValues_it = malloc(sizeof(double)*steps);
+	double* zValues_it = malloc(sizeof(double)*steps);
 	double xmin = -4;
 	double xmax = 4;
 	double ymin = -4;
@@ -111,6 +143,19 @@ int main (int argc, char** argv) {
 	struct Vector** vec = malloc(sizeof(struct Vector*)*steps);	
 	for (int j=1; j < steps; j++) {
 		vec[j] = new_Vector(DIM);
+	}
+	
+	//find geodesic iteratively
+	struct Vector** vec_it = malloc(sizeof(struct Vector*)*steps);
+	vec_it[0] = vec0;	
+	for (int j=1; j < steps; j++) {
+		vec_it[j] = new_Vector(DIM);
+		geodesic_step(vec_it[j-1],h,vec_it[j]);		
+	}
+	for (int j=0; j < steps; j++) {
+		xValues_it[j] = vec_it[j]->values[0];
+		yValues_it[j] = vec_it[j]->values[1];
+		zValues_it[j] = vec_it[j]->values[2];
 	}
 
 	//solve ODE
@@ -216,8 +261,11 @@ int main (int argc, char** argv) {
 			}
 		}
 		
-		glColor4f(0.0,0.0,0.0,1.0);
+		glColor4f(0.85,0.85,0.10,1.0);
 		plotArray3D(xValues,yValues,zValues,steps);
+		glColor4f(0.9,0.2,0.4,1.0);
+		plotArray3D(xValues_it,yValues_it,zValues_it,steps);
+		glColor4f(0.0,0.0,0.0,1.0);
 	}
 
 
