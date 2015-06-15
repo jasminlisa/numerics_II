@@ -1,1 +1,0 @@
-gcc -Wall -pedantic -std=c99 -I/homes/pm2/pm2-227/SDL2/include -L/homes/pm2/pm2-227/SDL2/lib -Wl,-rpath,/homes/pm2/pm2-227/SDL2/lib -o program code.c lina.c num_ode.c glplot.c glfont.c -lSDL2 -lGL -lX11 -lm
