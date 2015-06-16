@@ -182,3 +182,30 @@ double getMinimum(double* x, int size){
 	}
 	return min;
 }
+
+
+double normAxb_squared(struct Matrix* a, struct Vector* b, struct Vector* x, int size){
+	int i=0;
+	double scalarprod=0;
+	struct Vector* help= new_Vector(size);
+	multiply_Matrix_Vector(a,x, help);
+	for(i=0;i<size;i++){
+		help->values[i]=help->values[i]-b->values[i];	
+		help->values[i]*=help->values[i];
+		scalarprod+=help->values[i];
+	}	
+	delete_Vector(help);
+	return scalarprod;
+
+}
+
+double scalarproductRn(struct Vector* x, struct Vector* y, int size){
+	int i;
+	double scalarprod=0;
+	double help=0;
+	for(i=0;i<size;i++){
+		help=x->values[i]*y->values[i];
+		scalarprod+=help;
+	}
+	return scalarprod;
+}

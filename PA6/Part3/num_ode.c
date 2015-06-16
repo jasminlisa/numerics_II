@@ -161,21 +161,7 @@ void adaptive_rk3 (void (*f)(double,struct Vector*,struct Vector*), double t0, s
 	}
 }
 
-/*calculate the f(x) for f=||Ax-b||^2 for GDM*/
-double normAxb_squared(struct Matrix* a, struct Vector* b, struct Vector* x, int size){
-	int i=0;
-	double scalarprod=0;
-	struct Vector* help= new_Vector(size);
-	multiply_Matrix_Vector(a,x, help);
-	for(i=0;i<size;i++){
-		help->values[i]=help->values[i]-b->values[i];	
-		help->values[i]*=help->values[i];
-		scalarprod+=help->values[i];
-	}	
-	delete_Vector(help);
-	return scalarprod;
 
-}
 
 /*Gives you the gradient in x of function above, result is stored in gradient*/
 void getGradient(struct Matrix* a, struct Vector* b, struct Vector* x, struct Vector* gradient, int size){
@@ -211,16 +197,7 @@ void gradientDescent(struct Matrix* a, struct Vector* b, struct Vector* initialV
 }
 
 //normal scalarproduct in R^n
-double scalarproductRn(struct Vector* x, struct Vector* y, int size){
-	int i;
-	double scalarprod=0;
-	double help=0;
-	for(i=0;i<size;i++){
-		help=x->values[i]*y->values[i];
-		scalarprod+=help;
-	}
-	return scalarprod;
-}
+
 
 /*scalarproduct induced by matrix*/
 double scalarproductMatrix(struct Matrix* a, struct Vector* x, struct Vector* y, int size){
@@ -233,7 +210,7 @@ double scalarproductMatrix(struct Matrix* a, struct Vector* x, struct Vector* y,
 
 
 /*is supposed to do the conjugate gradient method. Not finished and dimensions might be wrong. */
-void conjugateGradient(struct Matrix* a, struct Vector* b, struct Vector* initialVal, struct Vector** x, int size, double precision, int steps){
+struct Vector* conjugateGradient(struct Matrix* a, struct Vector* b, struct Vector* initialVal, struct Vector** x, int size, double precision, int steps){
 	x[0]=initialVal;
 	
 	
@@ -249,8 +226,9 @@ void conjugateGradient(struct Matrix* a, struct Vector* b, struct Vector* initia
 	
 	struct Vector* help=new_Vector(size);
 	struct Vector* help1=new_Vector(size);
-	struct Vector* alpha=new_Vector(steps);
+	//struct Vector* alpha=new_Vector(steps);
 	struct Vector* beta=new_Vector(steps);
+	double alpha;
 	multiply_Matrix_Vector(a,x[0],help);
 	scale_Vector(-1,help,help);
 	//set r[0]
@@ -260,22 +238,23 @@ void conjugateGradient(struct Matrix* a, struct Vector* b, struct Vector* initia
 	for(i=0;i<steps-1;i++){
 		double sp1=scalarproductRn(r[i],r[i],size);
 		double sp2=scalarproductMatrix(a,p[i],p[i],size);
-		alpha->values[i]=sp1/sp2;
-		scale_Vector(alpha->values[i],p[i],help1);
+		//alpha->values[i]=sp1/sp2;
+		alpha = sp1/sp2;
+		//scale_Vector(alpha->values[i],p[i],help1);
+		scale_Vector(alpha,p[i],help1);
 		add_Vectors(x[i],help1,x[i+1]);
 		multiply_Matrix_Vector(a,p[i],help);
-		scale_Vector(-1,help,help);
+		scale_Vector(-1*alpha,help,help);
 		add_Vectors(r[i],help,r[i+1]);
 		if(vectornorm(r[i+1])<precision){
-			break;
+			return x[i+1];
 		}
 		sp2=scalarproductRn(r[i],r[i],size);
 		beta->values[i]=sp1/sp2;
 		scale_Vector(beta->values[i],p[i],help);
-		add_Vectors(help,r[i+1],p[i+1]);
-	
-		
+		add_Vectors(help,r[i+1],p[i+1]);		
 	}
+	return NULL;
 
 }
 
