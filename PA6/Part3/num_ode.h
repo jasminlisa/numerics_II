@@ -32,7 +32,7 @@ void adaptive_rk3 (void (*f)(double,struct Vector*,struct Vector*), double t0, s
 
 void rk4 (void (*f)(double,struct Vector*,struct Vector*), double t0, struct Vector* y0, double tol, double* t, struct Vector** y, int steps);
 
-double normAxb_squared(struct Matrix* a, struct Vector* b, struct Vector* x, int size);
+//double normAxb_squared(struct Matrix* a, struct Vector* b, struct Vector* x, int size);
 
 void getGradient(struct Matrix* a, struct Vector* b, struct Vector* x, struct Vector* gradient, int size);
 
@@ -42,6 +42,6 @@ double scalarproductRn(struct Vector* x, struct Vector* y, int size);
 
 double scalarproductMatrix(struct Matrix* a, struct Vector* x, struct Vector* y, int size);
 
-void conjugateGradient(struct Matrix* a, struct Vector* b, struct Vector* initialVal, struct Vector** x, int size, double precision, int steps);
+struct Vector* conjugateGradient(struct Matrix* a, struct Vector* b, struct Vector* initialVal, struct Vector** x, int size, double precision, int steps);
 
 #endif /* NUM_ODE_H */

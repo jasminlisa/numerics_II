@@ -67,4 +67,10 @@ Calculates the minimum of an array. Needed for dynamic calculation of ymin and y
 */
 double getMinimum(double* x, int size); 
 
+/*calculate the f(x) for f=||Ax-b||^2 for GDM*/
+double normAxb_squared(struct Matrix* a, struct Vector* b, struct Vector* x, int size);
+
+//Calculate the scalar product in R^n
+double scalarproductRn(struct Vector* x, struct Vector* y, int size);
+
 #endif /* LINA_H */

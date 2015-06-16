@@ -46,9 +46,13 @@ int main (int argc, char** argv) {
 	}
 	//struct Vector* y=new_Vector(steps);
 	//gradientDescent(a,b,initialVal,x,y,gamma,2,steps);
-	conjugateGradient(a,b,initialVal,x,2, 0.001, steps);
-	for (int j=1; j < steps; j++) {
-		print_Vector(x[j]);
+	struct Vector* result = conjugateGradient(a,b,initialVal,x,2, 0.001, steps);
+	if(result!=NULL){
+		print_Vector(result);
+	}else{
+		for (int j=1; j < steps; j++) {
+			print_Vector(x[j]);
+		}
+		return 0;
 	}
-	return 0;
 }
