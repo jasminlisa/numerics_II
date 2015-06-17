@@ -33,7 +33,7 @@ int main (int argc, char** argv) {
 	int steps=100;
 	//double gamma=0.001;
 	struct Matrix* a=eye(2);
-	a->values[0][0]=2;
+	a->values[0][0]=9;
 	struct Vector* b=new_Vector(2);
 	b->values[0]=1;
 	b->values[1]=1;

@@ -163,100 +163,15 @@ void adaptive_rk3 (void (*f)(double,struct Vector*,struct Vector*), double t0, s
 
 
 
-/*Gives you the gradient in x of function above, result is stored in gradient*/
-void getGradient(struct Matrix* a, struct Vector* b, struct Vector* x, struct Vector* gradient, int size){
-	struct Vector* help= new_Vector(size);
-	struct Vector* help2= new_Vector(size);
-	struct Matrix* transposed=new_Matrix(size,size);
-	transpose(a,transposed);
-	multiply_Matrix_Vector(a,x, help);
-	for(int i=0;i<size;i++){
-		help->values[i]=help->values[i]-b->values[i];	
-	}
-	multiply_Matrix_Vector(transposed,help,help2);
-	scale_Vector(2,help2,gradient);
-	
-}
 
-/*   Gradient Descent Method, assuming gamma is given?*/
-void gradientDescent(struct Matrix* a, struct Vector* b, struct Vector* initialVal, struct Vector** x, struct Vector* y, double gamma, int size, int steps){
-
-	x[0]=initialVal;
-	int i=0;
-	struct Vector* gradient=new_Vector(size);
-		
-	for(i=1;i<steps;i++){
-		getGradient(a,b,x[i-1],gradient,size);
-		scale_Vector(-gamma,gradient,gradient);
-		
-		add_Vectors(x[i-1],gradient,x[i]);
-		y->values[i]=normAxb_squared(a,b,x[i],size);
-	}
-
-
-}
 
 //normal scalarproduct in R^n
 
 
-/*scalarproduct induced by matrix*/
-double scalarproductMatrix(struct Matrix* a, struct Vector* x, struct Vector* y, int size){
-	struct Vector* help=new_Vector(size);
-	multiply_Matrix_Vector(a,x,help);
-	return scalarproductRn(help,y,size);
 
 
-}
 
 
-/*is supposed to do the conjugate gradient method. Not finished and dimensions might be wrong. */
-struct Vector* conjugateGradient(struct Matrix* a, struct Vector* b, struct Vector* initialVal, struct Vector** x, int size, double precision, int steps){
-	x[0]=initialVal;
-	
-	
-
-	struct Vector** r = malloc(sizeof(struct Vector*)*steps);	
-	for (int j=0; j < steps; j++) {
-		r[j] = new_Vector(size);
-	}
-	struct Vector** p = malloc(sizeof(struct Vector*)*steps);	
-	for (int j=0; j < steps; j++) {
-		p[j] = new_Vector(size);
-	}
-	
-	struct Vector* help=new_Vector(size);
-	struct Vector* help1=new_Vector(size);
-	//struct Vector* alpha=new_Vector(steps);
-	struct Vector* beta=new_Vector(steps);
-	double alpha;
-	multiply_Matrix_Vector(a,x[0],help);
-	scale_Vector(-1,help,help);
-	//set r[0]
-	add_Vectors(b,help,r[0]);
-	p[0]=r[0];
-	int i=0;
-	for(i=0;i<steps-1;i++){
-		double sp1=scalarproductRn(r[i],r[i],size);
-		double sp2=scalarproductMatrix(a,p[i],p[i],size);
-		//alpha->values[i]=sp1/sp2;
-		alpha = sp1/sp2;
-		//scale_Vector(alpha->values[i],p[i],help1);
-		scale_Vector(alpha,p[i],help1);
-		add_Vectors(x[i],help1,x[i+1]);
-		multiply_Matrix_Vector(a,p[i],help);
-		scale_Vector(-1*alpha,help,help);
-		add_Vectors(r[i],help,r[i+1]);
-		if(vectornorm(r[i+1])<precision){
-			return x[i+1];
-		}
-		sp2=scalarproductRn(r[i],r[i],size);
-		beta->values[i]=sp1/sp2;
-		scale_Vector(beta->values[i],p[i],help);
-		add_Vectors(help,r[i+1],p[i+1]);		
-	}
-	return NULL;
-
-}
 
 
 

@@ -73,4 +73,17 @@ double normAxb_squared(struct Matrix* a, struct Vector* b, struct Vector* x, int
 //Calculate the scalar product in R^n
 double scalarproductRn(struct Vector* x, struct Vector* y, int size);
 
+//Calculate the scalar product x^T*A*x
+double scalarproductMatrix(struct Matrix* a, struct Vector* x, struct Vector* y, int size);
+
+//Get the gradient
+void getGradient(struct Matrix* a, struct Vector* b, struct Vector* x, struct Vector* gradient, int size);
+
+//Get the gradient descent
+void gradientDescent(struct Matrix* a, struct Vector* b, struct Vector* initialVal, struct Vector** x, struct Vector* y, double gamma, int size, int steps);
+
+//Use conjugate gradient to solve the linear system Ax=b
+struct Vector* conjugateGradient(struct Matrix* a, struct Vector* b, struct Vector* initialVal, struct Vector** x, int size, double precision, int steps);
+
+
 #endif /* LINA_H */
