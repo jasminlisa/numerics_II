@@ -11,48 +11,60 @@
 #include "glplot.h"
 
 
-#define SIGMA 10
-#define RHO 28
-#define BETA (8/3)
-
-/*
-RHS of Lorenz-equation
-@author Jan
-*/
-void f (double t, struct Vector* vec, struct Vector* res) {
-	res->values[0] = SIGMA*(vec->values[1]-vec->values[0]);
-	res->values[1] = vec->values[0]*(RHO-vec->values[2])-vec->values[1];
-	res->values[2] = vec->values[0]*vec->values[1]-BETA*vec->values[2];
-}
-
-
 
 /* Run Program */
 int main (int argc, char** argv) {
 
-	int steps=100;
-	//double gamma=0.001;
-	struct Matrix* a=eye(2);
-	a->values[0][0]=9;
-	struct Vector* b=new_Vector(2);
-	b->values[0]=1;
-	b->values[1]=1;
-	struct Vector* initialVal=new_Vector(2);
-	initialVal->values[0]=1;
-	initialVal->values[1]=1;
+	//Some input reading for easier use, including which method should be used
+	int steps=1000;
+	if (argc > 1) steps = atoi(argv[1]);
+	double gamma=0.001;
+	if (argc>2) gamma = atof(argv[2]);
+	double method = 0;
+	if (argc>3) method = atoi(argv[3]);
+	struct Matrix* a=eye(DIM);
+	change_Matrix(a,0,0,4);
+	change_Matrix(a,1,1,2);
+	struct Vector* b=new_Vector(DIM);
+	int i;
+	for(i=0; i<DIM; i++){
+		b->values[i]=1;
+	}
+	/*b->values[1]=1;
+	b->values[2]=1;
+	b->values[3]=1;
+	b->values[4]=1;*/
+	struct Vector* initialVal=new_Vector(DIM);
+	for(i=0; i<DIM; i++){
+		initialVal->values[i]=1;
+	}
+	/*initialVal->values[1]=1;
+	initialVal->values[2]=1;
+	initialVal->values[3]=1;
+	initialVal->values[4]=1;*/
 	struct Vector** x = malloc(sizeof(struct Vector*)*steps);	
-	for (int j=0; j < steps; j++) {
-		x[j] = new_Vector(DIM);
+	for (i=0; i < steps; i++) {
+		x[i] = new_Vector(DIM); //Vorher: DIM
 	}
-	//struct Vector* y=new_Vector(steps);
-	//gradientDescent(a,b,initialVal,x,y,gamma,2,steps);
-	struct Vector* result = conjugateGradient(a,b,initialVal,x,2, 0.001, steps);
-	if(result!=NULL){
-		print_Vector(result);
+	if(method==0){
+		gradientDescent(a,b,initialVal,x,gamma,DIM,steps);
+		print_Vector(x[steps-1]);
 	}else{
-		for (int j=1; j < steps; j++) {
-			print_Vector(x[j]);
+		int lastIndex = conjugateGradient(a,b,initialVal,x,DIM, gamma, steps);
+		if(lastIndex!=-1){
+			print_Vector(x[lastIndex]);
+		}else{
+			for (int j=0; j < steps; j++) {
+				print_Vector(x[j]);
+			}		
 		}
-		return 0;
 	}
+	for(i=0;i<steps;i++){
+		delete_Vector(x[i]);
+	}
+	free(x);
+	delete_Vector(b);
+	delete_Matrix(a);
+	delete_Vector(initialVal);
+	return 0;
 }

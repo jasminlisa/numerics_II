@@ -25,7 +25,7 @@ void print_Vector(struct Vector* v) {
 		if (i != v->height-1) printf("%f,\t",v->values[i]);
 		else printf("%f",v->values[i]);
 	}
-	printf("]\n\n");
+	printf("]\n");
 }
 
 double vectornorm(struct Vector* v) {
@@ -77,6 +77,14 @@ void delete_Matrix(struct Matrix* m) {
 	free(m->values[0]);
 	free(m->values);
 	free(m);
+}
+
+void change_Matrix(struct Matrix* m, int i, int j, double value){
+	if(i>=m->height || i<0 || j<0 || j>m->width){
+		printf("Wrong dimension in change_Matrix!");
+		return;
+	}
+	m->values[i][j]=value;
 }
 
 struct Matrix* ones(int height, int width) {
@@ -203,7 +211,9 @@ double normAxb_squared(struct Matrix* a, struct Vector* b, struct Vector* x, int
 double scalarproductMatrix(struct Matrix* a, struct Vector* x, struct Vector* y, int size){
 	struct Vector* help=new_Vector(size);
 	multiply_Matrix_Vector(a,x,help);
-	return scalarproductRn(help,y,size);
+	double value = scalarproductRn(help,y,size);
+	delete_Vector(help);
+	return value;
 
 
 }
@@ -231,13 +241,15 @@ void getGradient(struct Matrix* a, struct Vector* b, struct Vector* x, struct Ve
 	}
 	multiply_Matrix_Vector(transposed,help,help2);
 	scale_Vector(2,help2,gradient);
-	
+	delete_Vector(help);
+	delete_Vector(help2);
+	delete_Matrix(transposed);	
 }
 
 /*   Gradient Descent Method, assuming gamma is given?*/
-void gradientDescent(struct Matrix* a, struct Vector* b, struct Vector* initialVal, struct Vector** x, struct Vector* y, double gamma, int size, int steps){
+void gradientDescent(struct Matrix* a, struct Vector* b, struct Vector* initialVal, struct Vector** x, double gamma, int size, int steps){
 
-	x[0]=initialVal;
+	copy_Vector(initialVal,x[0]);
 	int i=0;
 	struct Vector* gradient=new_Vector(size);
 		
@@ -246,16 +258,16 @@ void gradientDescent(struct Matrix* a, struct Vector* b, struct Vector* initialV
 		scale_Vector(-gamma,gradient,gradient);
 		
 		add_Vectors(x[i-1],gradient,x[i]);
-		y->values[i]=normAxb_squared(a,b,x[i],size);
 	}
+	delete_Vector(gradient);
 
 
 }
 
 /*Conjugate gradient method from wikipedia. First version by Jasmin, changes made by Alex*/
-struct Vector* conjugateGradient(struct Matrix* a, struct Vector* b, struct Vector* initialVal, struct Vector** x, int size, double precision, int steps){
-	x[0]=initialVal;	
+int conjugateGradient(struct Matrix* a, struct Vector* b, struct Vector* initialVal, struct Vector** x, int size, double precision, int steps){
 	
+	copy_Vector(initialVal,x[0]);
 	//This could still be optimised
 	struct Vector** r = malloc(sizeof(struct Vector*)*steps);	
 	for (int j=0; j < steps; j++) {
@@ -264,16 +276,16 @@ struct Vector* conjugateGradient(struct Matrix* a, struct Vector* b, struct Vect
 	struct Vector* p = new_Vector(size);
 	struct Vector* help=new_Vector(size);
 	struct Vector* help1=new_Vector(size);
-	double beta;
-	double alpha;
-	double sp1;
-	double sp2;
+
+	double alpha, beta, sp1, sp2;
+
 	multiply_Matrix_Vector(a,x[0],help);
 	scale_Vector(-1,help,help);
 	//set r[0]
 	add_Vectors(b,help,r[0]);
-	p=r[0];
+	copy_Vector(r[0],p);
 	int i=0;
+	int lastIndex=-1;
 	for(i=0;i<steps-1;i++){
 		sp1 =scalarproductRn(r[i],r[i],size);
 		sp2 =scalarproductMatrix(a,p,p,size);
@@ -284,13 +296,10 @@ struct Vector* conjugateGradient(struct Matrix* a, struct Vector* b, struct Vect
 		scale_Vector(-1*alpha,help,help);
 		add_Vectors(r[i],help,r[i+1]);
 		if(vectornorm(r[i+1])<precision){
-			//Deleting some things, r is making problems
-			delete_Vector(p);
-			delete_Vector(help);
-			delete_Vector(help1);
-			free(r);
-			return x[i+1];
+			lastIndex=i+1;
+			break;
 		}
+		sp1=scalarproductRn(r[i+1],r[i+1],size);
 		sp2=scalarproductRn(r[i],r[i],size);
 		beta = sp1/sp2;
 		scale_Vector(beta,p,help);
@@ -299,7 +308,10 @@ struct Vector* conjugateGradient(struct Matrix* a, struct Vector* b, struct Vect
 	delete_Vector(p);
 	delete_Vector(help);
 	delete_Vector(help1);
+	for (int j=0; j < steps; j++) {
+		delete_Vector(r[j]);
+	}
 	free(r);
-	return NULL;
+	return lastIndex;
 
 }

@@ -20,6 +20,7 @@ struct Vector* new_Vector(int height);
 /* Deconstructor for a vector */
 void delete_Vector(struct Vector* v);
 
+
 /* Declare some functions to manipulate and utilize vectors.
  * Operations like add and scale will not change their argument vectors. The result will stored in res. 
  */
@@ -38,6 +39,10 @@ struct Matrix* new_Matrix(int height, int width);
 
 /* Deconstructor for a matrix */
 void delete_Matrix(struct Matrix* m);
+
+
+/*A function for easier and better matrix changes*/
+void change_Matrix(struct Matrix* m, int i, int j, double value);
 
 /* Declare some functions to manipulate and utilize matrices.
  *Operations like multiply and transpose will not change their argument matrices. The result is stored in res.
@@ -80,10 +85,10 @@ double scalarproductMatrix(struct Matrix* a, struct Vector* x, struct Vector* y,
 void getGradient(struct Matrix* a, struct Vector* b, struct Vector* x, struct Vector* gradient, int size);
 
 //Get the gradient descent
-void gradientDescent(struct Matrix* a, struct Vector* b, struct Vector* initialVal, struct Vector** x, struct Vector* y, double gamma, int size, int steps);
+void gradientDescent(struct Matrix* a, struct Vector* b, struct Vector* initialVal, struct Vector** x, double gamma, int size, int steps);
 
 //Use conjugate gradient to solve the linear system Ax=b
-struct Vector* conjugateGradient(struct Matrix* a, struct Vector* b, struct Vector* initialVal, struct Vector** x, int size, double precision, int steps);
+int conjugateGradient(struct Matrix* a, struct Vector* b, struct Vector* initialVal, struct Vector** x, int size, double precision, int steps);
 
 
 #endif /* LINA_H */
