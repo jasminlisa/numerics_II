@@ -160,7 +160,7 @@ int main (int argc, char** argv) {
 
 	//solve ODE
 	//adaptive_rk3(geodesic_rhs,t0,vec0,h,t,vec,steps);
-	rk4(geodesic_rhs,t0,vec0,h,t,vec,steps);
+	euler(geodesic_rhs,t0,vec0,h,t,vec,steps);
 
 	for (int j=0; j < steps; j++) {
 		xValues[j] = vec[j]->values[0];
