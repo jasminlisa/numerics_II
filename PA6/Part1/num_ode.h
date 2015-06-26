@@ -4,7 +4,7 @@
 #include "lina.h"
 
 #ifndef DIM
-#define DIM 5 //<--- the dimension macro needs to be adjusted depending on the problem
+#define DIM 6 //<--- the dimension macro needs to be adjusted depending on the problem
 #endif
 
 
@@ -31,11 +31,5 @@ void heun (void (*f)(double,struct Vector*,struct Vector*), double t0, struct Ve
 void adaptive_rk3 (void (*f)(double,struct Vector*,struct Vector*), double t0, struct Vector* y0, double tol, double* t, struct Vector** y, int steps);
 
 void rk4 (void (*f)(double,struct Vector*,struct Vector*), double t0, struct Vector* y0, double tol, double* t, struct Vector** y, int steps);
-
-
-
-
-
-
 
 #endif /* NUM_ODE_H */

@@ -1,6 +1,6 @@
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
+
 #include "lina.h"
 #include "num_ode.h"
 
@@ -160,20 +160,6 @@ void adaptive_rk3 (void (*f)(double,struct Vector*,struct Vector*), double t0, s
 		delete_Vector(k3);
 	}
 }
-
-
-
-
-
-//normal scalarproduct in R^n
-
-
-
-
-
-
-
-
 
 /* Runge-Kutta Scheme of order 4 */
 void rk4 (void (*f)(double,struct Vector*,struct Vector*), double t0, struct Vector* y0, double h, double* t, struct Vector** y, int steps) {
