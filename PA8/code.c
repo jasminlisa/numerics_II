@@ -10,7 +10,17 @@
 #include "glfont.h"
 #include "glplot.h"
 
+/* Calculate eigenvalues of K_n */
+void eigenvalues_K_n (int dim, struct Vector* res) {
+	for (int k = 0; k < dim; k++) {
+		res->values[k] = -1/(float)(dim+1) * (2 - 2* cos((k+1)*PI/(dim+1)));
+	}
+}
 
+/* Calculate condition number of K_n */
+double condition_number_K_n (int dim) {
+	return (2 - 2* cos(dim*PI/(dim+1)))/(2 - 2* cos(PI/(dim+1)));
+} 
 
 /* Run Program */
 int main (int argc, char** argv) {
@@ -55,7 +65,7 @@ int main (int argc, char** argv) {
 	//initialize matrices and vectors
 	struct Matrix* a=eye(DIM);
 	generateKd(DIM,a);
-	print_Matrix(a);
+
 	struct Vector* b=new_Vector(DIM);
 	int i;
 	for(i=0; i<DIM; i++){
@@ -70,76 +80,85 @@ int main (int argc, char** argv) {
 	
 	bool loop=true;
 	SDL_Event event;
-	//wo macht man den die Klammer wieder zu?
+
+	//Exercise 4 output
+	struct Vector* eigenvalues = new_Vector(DIM);
+	eigenvalues_K_n(DIM,eigenvalues);
+	print_Vector(eigenvalues);
+	delete_Vector(eigenvalues);
+	printf("Condition Number for Dimension %d: %f\n",DIM,condition_number_K_n(DIM));
+
 	while (loop) {
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
-					loop = false;
-
-				}
-	//aaaah aber steps muss sich ja auch in der Berechnung oben aendern
+				loop = false;
+			}
 			if (event.type== SDL_KEYDOWN) {
-				if(event.key.keysym.scancode == SDL_SCANCODE_S)
-					steps += 1;
-				if(event.key.keysym.scancode == SDL_SCANCODE_A)
-					steps -= 1;
+				if(event.key.keysym.scancode == SDL_SCANCODE_S){
+					steps *= 2;
+				}
+				if(event.key.keysym.scancode == SDL_SCANCODE_A){
+					if (steps > 2) {
+						steps /= 2;
+					} else {
+						steps =1;
+					}
+				}
 			}
 		}
 
 
 
 
-	struct Vector* fx = new_Vector(steps);	
+		struct Vector* fx = new_Vector(steps);	
 	
-	double* xvalues=malloc(sizeof(double)*steps);
-	for(i=0; i<steps; i++){
-		xvalues[i]=i;
-	}	
+		double* xvalues=malloc(sizeof(double)*steps);
+		for(i=0; i<steps; i++){
+			xvalues[i]=i;
+		}	
 
 
-	double* yvalues=malloc(sizeof(double)*steps);
+		double* yvalues=malloc(sizeof(double)*steps);
 	
 
-	struct Vector** x = malloc(sizeof(struct Vector*)*steps);	
-	for (i=0; i < steps; i++) {
-		x[i] = new_Vector(DIM); //Vorher: DIM	
-	}
-	if(method==0){
-		gradientDescent(a,b,initialVal,x,gamma,DIM,steps);
-		for(int i=0;i<steps;i++){
+		struct Vector** x = malloc(sizeof(struct Vector*)*steps);	
+		for (i=0; i < steps; i++) {
+			x[i] = new_Vector(DIM); //Vorher: DIM	
+		}
+		if(method==0){
+			gradientDescent(a,b,initialVal,x,gamma,DIM,steps);
+			for(int i=0;i<steps;i++){
 		
-				fx->values[i]=normAxb_squared(a,b,x[i],DIM);			
+					fx->values[i]=normAxb_squared(a,b,x[i],DIM);			
 			
 			
 			
-			yvalues[i]=fx->values[i];
+				yvalues[i]=fx->values[i];
 
-		}
+			}
 
-		//print_Vector(x[steps-1]);
-	}else{
-		int lastIndex = conjugateGradient(a,b,initialVal,x,DIM, gamma, steps);
-printf("%d",lastIndex);
-		if(lastIndex!=-1){
-			//print_Vector(x[lastIndex]);
-		}else{
-			for (int j=0; j < steps; j++) {
-				//print_Vector(x[j]);
-			}		
-		}
-		for(int i=0;i<steps;i++){
+			//print_Vector(x[steps-1]);
+		}else if (method==1) {
+			int lastIndex = conjugateGradient(a,b,initialVal,x,DIM, gamma, steps);
+			//printf("%d",lastIndex);
+			if(lastIndex!=-1){
+				//print_Vector(x[lastIndex]);
+			}else{
+				for (int j=0; j < steps; j++) {
+					//print_Vector(x[j]);
+				}		
+			}
+			for(int i=0;i<steps;i++){
 		
-				fx->values[i]=normAxb_squared(a,b,x[i],DIM);			
-				//print_Vector(fx);
+					fx->values[i]=normAxb_squared(a,b,x[i],DIM);			
+					//print_Vector(fx);
 			
 			
-			yvalues[i]=fx->values[i];
+				yvalues[i]=fx->values[i];
 
+			}
 		}
-	}
-	
-
-//2d orbit plotting
+		
 			//Plot Functions
 			double xpos = -0.9;
 			double ypos = -0.9;
@@ -172,9 +191,9 @@ printf("%d",lastIndex);
 			//Plot as array points (otherwise nothing interesting happens)
 			glColor4f(1.0,0.0,1.0,0.0);
 			glPointSize(5);
-			plotArrayPoints(xvalues, yvalues, steps, 0, steps, 0, 10, xpos, ypos, width, height);
+			plotArrayPoints(xvalues, yvalues, steps, 0, steps, 0, DIM*DIM/2 , xpos, ypos, width, height);
 			SDL_GL_SwapWindow(win);
-	//Prepare next frame buffer
+			//Prepare next frame buffer
 			glClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
 			glClear( GL_COLOR_BUFFER_BIT);
 			glEnable(GL_DEPTH_TEST);
@@ -187,11 +206,11 @@ printf("%d",lastIndex);
 			
 	
 
-	for(i=0;i<steps;i++){
-		delete_Vector(x[i]);
-	}
+		for(i=0;i<steps;i++){
+			delete_Vector(x[i]);
+		}
 	
-	free(x);
+		free(x);
 	}
 	delete_Vector(b);
 	delete_Matrix(a);

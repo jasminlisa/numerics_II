@@ -74,18 +74,19 @@ struct Matrix* new_Matrix(int height, int width) {
 }
 
 void generateKd(int dim, struct Matrix* kd){
-	
-	change_Matrix(kd,0,0,2);
-	change_Matrix(kd,0,1,-1);
-	change_Matrix(kd,dim-1,dim-2,-1);
-	change_Matrix(kd,dim-1,dim-1,2);
-	for(int i=1;i<dim-1;i++){
-		change_Matrix(kd,i,i-1,-1);
-		change_Matrix(kd,i,i+1,-1);
-		change_Matrix(kd,i,i,2);
+	if (dim==1) {
+		kd = eye(1);
+	} else {
+		change_Matrix(kd,0,0,2);
+		change_Matrix(kd,0,1,-1);
+		change_Matrix(kd,dim-1,dim-2,-1);
+		change_Matrix(kd,dim-1,dim-1,2);
+		for(int i=1;i<dim-1;i++){
+			change_Matrix(kd,i,i-1,-1);
+			change_Matrix(kd,i,i+1,-1);
+			change_Matrix(kd,i,i,2);
+		}
 	}
-	
-
 }
 
 

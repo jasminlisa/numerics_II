@@ -4,7 +4,8 @@
 #include "lina.h"
 
 #ifndef DIM
-#define DIM 3 //<--- the dimension macro needs to be adjusted depending on the problem
+#define DIM 300 //<--- the dimension macro needs to be adjusted depending on the problem
+#define PI 3.14159265359
 #endif
 
 

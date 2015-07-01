@@ -24,7 +24,7 @@ void plotArrayPoints (double* x, double* y, int size, double xmin, double xmax, 
 	double yfac = height/ydiff;
 	glPointSize(5.0f);
 	glBegin(GL_POINTS);
-		for (int j=1; j<size; j++) {
+		for (int j=0; j<size; j++) {
 			glVertex3f((x[j]-xmin)*xfac+xpos,(y[j]-ymin)*yfac+ypos,0.0f);
 		}	
 	glEnd();
